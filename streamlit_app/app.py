@@ -7,7 +7,7 @@
 # =============================================================================
 
 import os
-from datetime import datetime
+rom datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -23,6 +23,12 @@ ARQUIVO_CSV = PASTA_APP / "pacientes.csv"
 COLUNAS = ["timestamp", "nome", "idade", "convenio", "prioridade", "motivo"]
 CONVENIOS = ["Particular", "Unimed", "Bradesco Saúde", "SulAmérica", "Outro"]
 CODIFICACAO = "utf-8-sig"   # acentos corretos no Excel
+
+
+# SUGESTÃO TÉCNICA: o servidor do Streamlit Cloud usa o horário UTC.
+# Fixamos o horário de Brasília (UTC-3; o Brasil não adota horário de verão
+# desde 2019) para que a data/hora do cadastro saia correta na nuvem.
+FUSO_BRASILIA = timezone(timedelta(hours=-3))
 
 
 # -----------------------------------------------------------------------------
@@ -91,7 +97,7 @@ if enviado:
         aviso.warning("⚠️ Selecione o convênio.")
     else:
         nova_linha = {
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "timestamp": datetime.now(FUSO_BRASILIA).strftime("%Y-%m-%d %H:%M:%S"),
             "nome": nome,
             "idade": int(idade),
             "convenio": convenio,
