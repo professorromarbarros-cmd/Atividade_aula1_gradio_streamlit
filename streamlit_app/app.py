@@ -7,7 +7,7 @@
 # =============================================================================
 
 import os
-rom datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pandas as pd
